@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Drum Kit</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 3rem;
+      letter-spacing: 2px;
+    }
+
+    .drum-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .drum-pad {
+      background: #222;
+      border: 2px solid #fff;
+      border-radius: 10px;
+      padding: 30px;
+      font-size: 2rem;
+      text-align: center;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .drum-pad:hover,
+    .drum-pad.active {
+      background: #00ffcc;
+      color: #000;
+      transform: scale(1.1);
+      border-color: #00ffcc;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🥁 Drum Kit</h1>
+  <div class="drum-container">
+    <div class="drum-pad" data-key="A">A<br><small>Clap</small></div>
+    <div class="drum-pad" data-key="S">S<br><small>HiHat</small></div>
+    <div class="drum-pad" data-key="D">D<br><small>Kick</small></div>
+    <div class="drum-pad" data-key="F">F<br><small>OpenHat</small></div>
+    <div class="drum-pad" data-key="G">G<br><small>Boom</small></div>
+    <div class="drum-pad" data-key="H">H<br><small>Ride</small></div>
+    <div class="drum-pad" data-key="J">J<br><small>Snare</small></div>
+    <div class="drum-pad" data-key="K">K<br><small>Tom</small></div>
+    <div class="drum-pad" data-key="L">L<br><small>Tink</small></div>
+  </div>
+
+  <p class="footer">Press keys A–L or click the pads</p>
+
+  <script>
+    const sounds = {
+      A: "https://s3.amazonaws.com/freecodecamp/drums/Clap-808.mp3", // Fixed Clap sound
+      S: "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3",
+      D: "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3",
+      F: "https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3",
+      G: "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3",
+      H: "https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3",
+      J: "https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3",
+      K: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3",
+      L: "https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3"
+    };
+
+    function playSound(key) {
+      const soundURL = sounds[key.toUpperCase()];
+      if (!soundURL) return;
+
+      const audio = new Audio(soundURL);
+      audio.currentTime = 0;
+      audio.play();
+
+      const pad = document.querySelector(`.drum-pad[data-key="${key.toUpperCase()}"]`);
+      if (pad) {
+        pad.classList.add("active");
+        setTimeout(() => pad.classList.remove("active"), 150);
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      playSound(e.key);
+    });
+
+    document.querySelectorAll(".drum-pad").forEach(pad => {
+      pad.addEventListener("click", () => {
+        const key = pad.getAttribute("data-key");
+        playSound(key);
+      });
+    });
+  </script>
+
+</body>
+</html>
